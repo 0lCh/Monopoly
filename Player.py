@@ -18,10 +18,10 @@ class Player:
                  7: [31, 32, 34],
                  8: [37, 39],
                  9: [5, 15, 25, 35],
-                 10:[12,28]}
+                 10: [12, 28]}
 
     def __init__(self, name, id):
-        self.realty = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [],10:[]}
+        self.realty = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: []}
         self.name = name
         self.id = id
 
@@ -43,7 +43,7 @@ class Player:
     def move(self):
         n1 = random.randint(1, 6)
         n2 = random.randint(1, 6)
-        print("ВЫПАЛО", n1, n2)
+        print("\033[32mНа кубиках выпало", n1, n2)
         # Если d=1 следует игрок прошел поле вперед и ему начисляется 2 млн
         d = (self.location + n1 + n2) // 40
         if d == 1:
@@ -80,7 +80,7 @@ class Player:
             self.active = False
 
     def print(self):
-        print(self.name, "\nОстаток на счету игрока= ", self.wallet)
+        print(self.name, "\nНа счету ", self.wallet)
 
     """
     def getrandomr(self):

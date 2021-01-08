@@ -8,6 +8,7 @@ import random
 import time
 
 
+# Генерация шанса
 def chance(apl):
     a = random.randint(0, 2)
     b = [250, 150, 100, 1000, 1500]
@@ -81,13 +82,13 @@ cplayers = 2
 players = []
 for i in range(cplayers):
     players.append(Player("Player " + str(i + 1), i))
-strtpl = []
-strtpl = players.copy()
 
+# Игра
 while active == True:
     print("--------------------------")
-    print("Ход игрока ", end="")
+    print("\033[31mХод игрока ", end="")
     players[apl].print()
+    print("\033[37m", end="")
 
     # Выбрасывание кубиков и переход на новое поле
 
@@ -97,6 +98,8 @@ while active == True:
         stop -= 1
     loc = players[apl].location
 
+    cards[loc].print()
+    print("\033[0m", end="")
     # Тюрьма посещение, заключение и бесплатная парковка
     if loc == 10:
         print("Вы попали на поле посещение тюрьмы")
@@ -111,7 +114,7 @@ while active == True:
         chance(apl)
 
     # !!! Будет проверка на тип карточки
-    cards[loc].print()
+
     if isinstance(cards[loc], TaxCard) == True:
         print("Игрок платит налог в размере", cards[loc].tax)
         players[apl].wallet -= cards[loc].tax
@@ -123,16 +126,16 @@ while active == True:
         cards[loc].owner = players[apl].buycard(cards[loc].cost, cards[loc].group, loc)
     elif cards[loc].owner != apl:
         # Плата аренды
+        print("Это поле принадлежит", players[cards[loc].owner].name)
         if isinstance(cards[loc], TransportCard) == True or isinstance(cards[loc], EnergyCard) == True:
             rent = cards[loc].checkrent(players[cards[loc].owner])
         else:
             rent = cards[loc].checkrent()
         print(players[apl].name, "платит игроку", players[cards[loc].owner].name,
               "аренду в размере",
-              rent)
+              rent, "\033[0m")
         players[apl].payrent(rent)
         players[cards[loc].owner].getrent(rent)
-    print("Остаток на счету игрока", players[apl].wallet)
 
     # Проверка на возможность построить дом
     spot = players[apl].checkbuilt()
@@ -152,7 +155,7 @@ while active == True:
     # time.sleep(0.01)
 
     # Проверка на повторный ход игрока
-
+    print("Остаток на счету игрока", players[apl].wallet)
     if flag == False:
         apl = (apl + 1) % cplayers
 
@@ -175,28 +178,6 @@ while active == True:
             print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
                   cards[r2].name)
 
-            """          
-            r1 = players[0].findcard(0)
-            r2 = players[1].findcard(cards[r1].group)
-            cards[r1].owner = 0
-            cards[r2].owner = 1
-
-            players[0].addr(cards[r1].group, r1)
-            players[1].remr(cards[r1].group, r1)
-            players[1].addr(cards[r2].group, r2)
-            players[0].remr(cards[r2].group, r2)
-            print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
-                  cards[r2].name)
-
-        
-            r1 = players[0].getrandomr()
-            r2 = players[1].getrandomr()
-            cards[r1].owner = 0
-            cards[r2].owner = 1
-            players[0].addr(cards[r2].group, r2)
-            players[1].addr(cards[r1].group, r1)
-            print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
-                  cards[r2].name)"""
     # Проверка на банкрота
     players[apl].checkbankrupt()
     if players[apl].active == False:
@@ -205,10 +186,10 @@ while active == True:
     # Проверка на конец игры
     if len(players) == 1:
         active = False
-        print("КОНЕЦ ИГРЫ")
-        print("ПОБЕДИЛ ИГРОК", players[0].name)
+        print("      \033[43m\033[30m\033[1m  КОНЕЦ ИГРЫ  \033[0m")
+        print("\033[43m\033[30m\033[1m  ПОБЕДИЛ ИГРОК", players[0].name, "  \033[0m")
         # for i in cards:
         #  if isinstance(i, CityCard) == True:
         # print(i.name, strtpl[i.owner].name, i.d, i.h)
 
-    # input()
+    input()

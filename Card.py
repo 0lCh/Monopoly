@@ -19,4 +19,4 @@ class Card:
         self.name = name
 
     def print(self):
-        print("ПОЛЕ №", self.id, self.name)
+        print("Игрок попадает на поле №", self.id, self.name)
