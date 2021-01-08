@@ -50,8 +50,7 @@ class Game:
         print("игрок попал на поле №", loc + 1, self.cards[loc].name, "цена", self.cards[loc].cost)
         # Проверка на возможность покупки и присвоение
         if self.cards[loc].owner == None:
-            self.cards[loc].owner = self.players[apl].buycity(self.cards[loc].cost, self.cards[loc].name,
-                                                              self.cards[loc].group)
+            self.cards[loc].owner = self.players[apl].buycity(self.cards[loc].cost, self.cards[loc].group, loc)
         elif self.cards[loc].owner != apl:
             # Плата аренды
             rent = self.cards[loc].checkrent()
@@ -60,20 +59,35 @@ class Game:
             self.players[apl].payrent(rent)
             self.players[self.cards[loc].owner].getrent(rent)
         print("Остаток на счету игрока", self.players[apl].wallet)
-        self.players[apl].checkbuilt()
+        # Проверка на возможеость построить дом
+        spot = self.players[apl].checkbuilt()
+        if spot != None:
+            if self.cards[spot].d < 4:
+                if self.players[apl].wallet > self.cards[spot].dc:
+                    self.players[apl].wallet -= self.cards[spot].dc
+                    self.cards[spot].plusd()
+            else:
+                if self.players[apl].wallet > self.cards[spot].hc:
+                    self.cards[spot].d = 0
+                    print("Игрок строит отель на поле", self.cards[spot].name)
+                    self.cards[spot].h = 1
+
         # Задержка времени
-        time.sleep(0.1)
+        time.sleep(0.5)
         # Проверка на повторный ход игрока
         if flag != True:
             self.actplayer = (self.actplayer + 1) % self.cplayers
         # Проверка на банкрота
-        if self.players[self.actplayer].active == False:
-            self.players.pop(self.actplayer)
+        self.players[apl].checkbankrupt()
+        if self.players[apl].active == False:
+            self.players.pop(apl)
         # Проверка на конец игры
         if len(self.players) == 1:
             self.active = False
-        #for i in self.cards:
-         #   print(i.name, i.owner,end="")
+            print("КОНЕЦ ИГРЫ")
+            print("ПОБЕДИЛ ИГРОК", self.players[0].name)
+        # for i in self.cards:
+        #   print(i.name, i.owner,end="")
 
-            # self.field.cards[self.players[self.actplayer].location].print()
+        # self.field.cards[self.players[self.actplayer].location].print()
     # self.field.cards[0].print()

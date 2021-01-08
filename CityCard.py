@@ -26,7 +26,7 @@ class CityCard:
     h = 0
     owner = None
 
-    def __init__(self, group,name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+    def __init__(self, group, name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
         self.group = group
         self.name = name
         self.cost = cost
@@ -47,7 +47,19 @@ class CityCard:
         cost = 0
         if self.d == 0:
             cost = self.d0
+            if self.h == 1:
+                cost = self.h1
         elif self.d == 1:
             cost = self.d1
+        elif self.d == 2:
+            cost = self.d2
+        elif self.d == 3:
+            cost = self.d4
+        elif self.d == 4:
+            cost = self.d4
         # и так далее
         return cost
+
+    def plusd(self):
+        print("Строит дом на поле", self.name)
+        self.d += 1
