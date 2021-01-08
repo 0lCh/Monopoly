@@ -37,6 +37,7 @@ class Game:
         self.players = []
         for i in range(self.cplayers):
             self.players.append(Player("Player " + str(i + 1), i))
+        self.strtpl = self.players
 
     def gameprogress(self):
         print("--------------------------")
@@ -61,7 +62,7 @@ class Game:
         print("Остаток на счету игрока", self.players[apl].wallet)
         # Проверка на возможеость построить дом
         spot = self.players[apl].checkbuilt()
-        if spot != None:
+        if spot != None and self.cards[spot].h != 1:
             if self.cards[spot].d < 4:
                 if self.players[apl].wallet > self.cards[spot].dc:
                     self.players[apl].wallet -= self.cards[spot].dc
@@ -69,11 +70,12 @@ class Game:
             else:
                 if self.players[apl].wallet > self.cards[spot].hc:
                     self.cards[spot].d = 0
+                    self.players[apl].wallet -= self.cards[spot].hc
                     print("Игрок строит отель на поле", self.cards[spot].name)
                     self.cards[spot].h = 1
 
         # Задержка времени
-        time.sleep(0.5)
+        # time.sleep(0.5)
         # Проверка на повторный ход игрока
         if flag != True:
             self.actplayer = (self.actplayer + 1) % self.cplayers
@@ -86,8 +88,6 @@ class Game:
             self.active = False
             print("КОНЕЦ ИГРЫ")
             print("ПОБЕДИЛ ИГРОК", self.players[0].name)
-        # for i in self.cards:
-        #   print(i.name, i.owner,end="")
-
-        # self.field.cards[self.players[self.actplayer].location].print()
-    # self.field.cards[0].print()
+            for i in self.cards:
+                if isinstance(i, CityCard) == True:
+                    print(i.name, i.d, i.h)

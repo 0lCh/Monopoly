@@ -70,7 +70,7 @@ class Player:
         self.wallet += cost
 
     def checkbankrupt(self):
-        if self.wallet < 0:
+        if self.wallet <= 0:
             self.active = False
 
     def print(self):
