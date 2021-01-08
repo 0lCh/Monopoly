@@ -3,7 +3,7 @@ class Card:
     name ="FIELD"
     cost = math.inf
     owner = None
-
+    group = None
     def __init__(self, i):
         self.i = i
 

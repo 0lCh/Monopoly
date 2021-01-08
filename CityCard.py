@@ -26,7 +26,8 @@ class CityCard:
     h = 0
     owner = None
 
-    def __init__(self, name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+    def __init__(self, group,name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+        self.group = group
         self.name = name
         self.cost = cost
         self.d0 = d0
