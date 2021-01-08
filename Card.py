@@ -10,11 +10,13 @@ class Card:
     d = 0
     dc = 0
 
+
     def plusd(self):
         return
 
-    def __init__(self, id):
+    def __init__(self, id, name):
         self.id = id
+        self.name = name
 
     def print(self):
         print("ПОЛЕ №", self.id, self.name)
