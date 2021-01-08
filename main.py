@@ -29,12 +29,21 @@ cards = [Card(0), CityCard(1, "Гдыня", 600, 20, 100, 300, 900, 1600, 2500, 
          CityCard(8, "Рига", 3500, 350, 1750, 5000, 11000, 13000, 15000, 1750, 2000, 2000), Card(38),
          CityCard(8, "Монреаль", 4000, 500, 2000, 6000, 14000, 17000, 20000, 2000, 2000, 2000)]
 
+allrealty = {1: [1, 3],
+             2: [6, 8, 9],
+             3: [11, 13, 14],
+             4: [16, 18, 19],
+             5: [21, 23, 24],
+             6: [26, 27, 29],
+             7: [31, 32, 34],
+             8: [37, 39]}
+
 cplayers = 2
 players = []
 for i in range(cplayers):
     players.append(Player("Player " + str(i + 1), i))
 strtpl = []
-strtpl=players.copy()
+strtpl = players.copy()
 
 while active == True:
     print("--------------------------")
@@ -60,7 +69,6 @@ while active == True:
         players[cards[loc].owner].getrent(rent)
     print("Остаток на счету игрока", players[apl].wallet)
 
-
     # Проверка на возможеость построить дом
     spot = players[apl].checkbuilt()
     if spot != None and cards[spot].h != 1:
@@ -76,13 +84,53 @@ while active == True:
                 cards[spot].h = 1
 
     # Задержка времени
-    time.sleep(0.01)
+    # time.sleep(0.01)
 
     # Проверка на повторный ход игрока
     if flag != True:
-        apl = (apl+ 1) % cplayers
+        apl = (apl + 1) % cplayers
 
+    # Обмен
+    g = 0
+    if spot == None:
+        for i in cards:
+            if i.owner != None:
+                g += 1
+        if g >= 18:
+            r1 = players[0].fndonecard(players[1].realty, 0)
+            r2 = players[1].fndonecard(players[0].realty, cards[r1].group)
+            cards[r1].owner = 0
+            cards[r2].owner = 1
 
+            players[0].addr(cards[r1].group, r1)
+            players[1].remr(cards[r1].group, r1)
+            players[1].addr(cards[r2].group, r2)
+            players[0].remr(cards[r2].group, r2)
+            print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
+                  cards[r2].name)
+
+            """          
+            r1 = players[0].findcard(0)
+            r2 = players[1].findcard(cards[r1].group)
+            cards[r1].owner = 0
+            cards[r2].owner = 1
+
+            players[0].addr(cards[r1].group, r1)
+            players[1].remr(cards[r1].group, r1)
+            players[1].addr(cards[r2].group, r2)
+            players[0].remr(cards[r2].group, r2)
+            print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
+                  cards[r2].name)
+
+        
+            r1 = players[0].getrandomr()
+            r2 = players[1].getrandomr()
+            cards[r1].owner = 0
+            cards[r2].owner = 1
+            players[0].addr(cards[r2].group, r2)
+            players[1].addr(cards[r1].group, r1)
+            print(players[0].name, "обменивает у игрока", players[1].name, "карточку", cards[r1].name, "на карточку",
+                  cards[r2].name)"""
     # Проверка на банкрота
     players[apl].checkbankrupt()
     if players[apl].active == False:
@@ -93,6 +141,6 @@ while active == True:
         active = False
         print("КОНЕЦ ИГРЫ")
         print("ПОБЕДИЛ ИГРОК", players[0].name)
-        for i in cards:
-            if isinstance(i, CityCard) == True:
-                print(i.name, strtpl[i.owner].name, i.d, i.h)
+        # for i in cards:
+        #  if isinstance(i, CityCard) == True:
+        # print(i.name, strtpl[i.owner].name, i.d, i.h)

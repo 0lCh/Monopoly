@@ -9,7 +9,8 @@ class Player:
     active = True
     location = 0
 
-    allrealty = {1: [1, 3], 2: [6, 8, 9],
+    allrealty = {1: [1, 3],
+                 2: [6, 8, 9],
                  3: [11, 13, 14],
                  4: [16, 18, 19],
                  5: [21, 23, 24],
@@ -75,3 +76,57 @@ class Player:
 
     def print(self):
         print(self.name, "\nОстаток на счету игрока= ", self.wallet)
+
+    """
+    def getrandomr(self):
+        k = list(self.realty.keys())
+        k1 = []
+        for i in k:
+            if self.realty[i] != []:
+                k1.append(k1)
+        j = random.randint(0, len(k1) - 1)
+        z = list(set(self.allrealty[j]) - set(self.realty[j]))
+        while len(z) == 0:
+            j = random.randint(0, len(k) - 1)
+            z = list(set(self.allrealty[j]) - set(self.realty[j]))
+        return z[0]
+
+    def findcard(self, nogroup):
+        k = list(self.realty)
+        for i in k:
+            a = list(set(self.allrealty[i]) - set(self.realty[i]))
+            if len(a) == 1 and i != nogroup:
+                return a[0]
+        self.getrandomr()
+"""
+
+    def fndonecard(self, srealty, nogroup):
+        k = list(self.realty)
+        j = None
+        for i in k:
+            a = list(set(srealty[i]) - set(self.realty[i]))
+            if len(a) == 1 and i != nogroup:
+                j = a[0]
+        if j != None:
+            return j
+        else:
+            self.findfreecard(srealty, nogroup)
+
+    def findfreecard(self, srealty, nogroup):
+        k = list(self.realty)
+        arr = []
+        for i in k:
+            if i != nogroup and collections.Counter(srealty[i]) != collections.Counter(self.allrealty[i]):
+                if len(srealty[i]) != 0:
+                    arr.append(srealty[i])
+        j = random.randint(0, len(arr) - 1)
+        b = arr[j][0]
+        return b
+
+    # self.getrandomr()
+
+    def addr(self, key, value):
+        self.realty[key].append(value)
+
+    def remr(self, key, value):
+        self.realty[key].remove(value)
