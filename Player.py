@@ -16,10 +16,12 @@ class Player:
                  5: [21, 23, 24],
                  6: [26, 27, 29],
                  7: [31, 32, 34],
-                 8: [37, 39]}
+                 8: [37, 39],
+                 9: [5, 15, 25, 35],
+                 10:[12,28]}
 
     def __init__(self, name, id):
-        self.realty = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: []}
+        self.realty = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [],10:[]}
         self.name = name
         self.id = id
 
@@ -43,17 +45,20 @@ class Player:
         n2 = random.randint(1, 6)
         print("ВЫПАЛО", n1, n2)
         # Если d=1 следует игрок прошел поле вперед и ему начисляется 2 млн
-        d = (self.location + n1 + n2) // 39
+        d = (self.location + n1 + n2) // 40
         if d == 1:
             print(self.name, "пересекает поле вперед и получает 2 млн")
             self.wallet += 2000
-        self.location = (self.location + n1 + n2) % 39
+        self.location = (self.location + n1 + n2) % 40
         flag = False
         if n1 == n2:
             flag = True
         return flag
 
-    def buycity(self, cost, group, loc):
+    def getamount(self, group):
+        return len(self.realty[group])
+
+    def buycard(self, cost, group, loc):
         if cost <= self.wallet:
             print(self.name, " покупает это поле")
             self.wallet -= cost

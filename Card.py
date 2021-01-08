@@ -1,11 +1,20 @@
 import math
+
+
 class Card:
-    name ="FIELD"
+    name = "FIELD"
     cost = math.inf
     owner = None
     group = None
-    def __init__(self, i):
-        self.i = i
+    h = 0
+    d = 0
+    dc = 0
+
+    def plusd(self):
+        return
+
+    def __init__(self, id):
+        self.id = id
 
     def print(self):
-        print("ПОЛЕ ", self.i)
+        print("ПОЛЕ №", self.id, self.name)

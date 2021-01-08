@@ -1,4 +1,4 @@
-import Card
+from Card import Card
 
 """ Карточка города
 Поля    
@@ -21,12 +21,13 @@ import Card
 """
 
 
-class CityCard:
+class CityCard(Card):
     d = 0
     h = 0
     owner = None
 
-    def __init__(self, group, name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+    def __init__(self, id, group, name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+        self.id = id
         self.group = group
         self.name = name
         self.cost = cost
@@ -41,7 +42,7 @@ class CityCard:
         self.hc = hc
 
     def print(self):
-        print(self.name, self.cost)
+        print("Игрок попал на поле №", self.id, self.name, "его стоимость", self.cost)
 
     def checkrent(self):
         cost = 0
