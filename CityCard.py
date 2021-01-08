@@ -42,3 +42,11 @@ class CityCard:
     def print(self):
         print(self.name, self.cost)
 
+    def checkrent(self):
+        cost = 0
+        if self.d == 0:
+            cost = self.d0
+        elif self.d == 1:
+            cost = self.d1
+        # и так далее
+        return cost

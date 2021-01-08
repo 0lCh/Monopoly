@@ -41,14 +41,24 @@ class Game:
     def gameprogress(self):
         print("--------------------------")
         print("Ход игрока ", end="")
-        self.players[self.actplayer].print()
+        apl = self.actplayer
+        self.players[apl].print()
         # Выбрасывание кубиков и переход на новое поле
-        flag = self.players[self.actplayer].move()
-        loc = self.players[self.actplayer].location
+        flag = self.players[apl].move()
+        loc = self.players[apl].location
         # !!! Будет проверка на тип карточки
         print("игрок попал на поле №", loc + 1, self.cards[loc].name, "цена", self.cards[loc].cost)
         # Проверка на возможность покупки и присвоение
-        self.cards[loc].owner = self.players[self.actplayer].buycity(self.cards[loc].cost)
+        if self.cards[loc].owner == None:
+            self.cards[loc].owner = self.players[apl].buycity(self.cards[loc].cost)
+        else:
+            # Плата аренды
+            rent = self.cards[loc].checkrent()
+            print(self.players[apl].name, "платит игроку", self.players[self.cards[loc].owner].name, "аренду в размере",
+                  rent)
+            self.players[apl].payrent(rent)
+            self.players[self.cards[loc].owner].getrent(rent)
+
         # Задержка времени
         time.sleep(1)
         # Проверка на повторный ход игрока

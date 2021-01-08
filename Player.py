@@ -35,6 +35,12 @@ class Player:
         else:
             return None
 
+    def payrent(self, cost):
+        self.wallet -= cost
+
+    def getrent(self, cost):
+        self.wallet += cost
+
     def checkbankrupt(self):
         if self.wallet < 0:
             self.active = False
