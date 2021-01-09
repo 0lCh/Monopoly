@@ -6,4 +6,3 @@ class TaxCard(Card):
         self.name = name
         self.id = id
         self.tax = tax
-

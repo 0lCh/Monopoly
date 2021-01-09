@@ -11,11 +11,6 @@ class TransportCard(Card):
     group = 9
     owner = None
 
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
-
-
     def checkrent(self, player):
         count = player.getamount(9)
         if count == 1:
@@ -28,5 +23,4 @@ class TransportCard(Card):
             cost = self.a4
         return cost
 
-    def print(self):
-        print("Игрок попал на поле №", self.id, self.name, "его стоимость", self.cost)
+

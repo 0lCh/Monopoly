@@ -1,11 +1,11 @@
 import collections
 import random
+import pygame
+import time
 
 
 class Player:
     wallet = 15000
-    property = []
-    additional = []
     active = True
     location = 0
 
@@ -20,10 +20,12 @@ class Player:
                  9: [5, 15, 25, 35],
                  10: [12, 28]}
 
-    def __init__(self, name, id):
+    def __init__(self, name, id, x1, color):
         self.realty = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: []}
         self.name = name
         self.id = id
+        self.x1 = x1
+        self.color = color
 
     def checkbuilt(self):
         keys = self.realty.keys()
@@ -31,36 +33,70 @@ class Player:
         a = []
         for i in keys:
             if collections.Counter(self.realty[i]) == collections.Counter(self.allrealty[i]):
-                # !!!Достать стоимость дома
-                print(self.name, "собрал все карточки группы №", i, "и может строить дом")
                 a.append(self.realty[i][random.randint(0, len(self.realty[i]) - 1)])
-
         if len(a) != 0:
             fl = a[random.randint(0, len(a) - 1)]
         return fl
-        # print(self.realty)
 
-    def move(self):
+    def move(self, screen, coords):
         n1 = random.randint(1, 6)
         n2 = random.randint(1, 6)
-        print("\033[32mНа кубиках выпало", n1, n2)
+        # Вывод кубиков на экран
+        cub1 = pygame.image.load('images/random/' + str(n1) + "dice.png").convert_alpha()
+        screen.blit(cub1, [450, 150])
+        cub1 = pygame.image.load('images/random/' + str(n2) + "dice.png").convert_alpha()
+        screen.blit(cub1, [750, 150])
+
         # Если d=1 следует игрок прошел поле вперед и ему начисляется 2 млн
         d = (self.location + n1 + n2) // 40
         if d == 1:
-            print(self.name, "пересекает поле вперед и получает 2 млн")
+            font = pygame.font.SysFont("intro", 30)
+            string1 = font.render(str(self.name) + " пересекает поле вперед и получает 2 млн", True, [0, 0, 0],
+                                  [150, 150, 150])
+            screen.blit(string1, [460, 500])
             self.wallet += 2000
+        # Прорисовка траекторий
+        for i in range(self.location, self.location + n1 + n2 + 1):
+            pygame.draw.circle(screen, self.color, coords[i % 40], 20)
+            pygame.display.flip()
+            time.sleep(0.1)
         self.location = (self.location + n1 + n2) % 40
+
+        # Проверка на повторный ход
         flag = False
         if n1 == n2:
             flag = True
         return flag
 
+    # Отрисовка недвижомости
+    def drawrealty(self, screen, cards):
+        k = list(self.realty.keys())
+        y = 200
+        x = self.x1
+        color = {1: [139, 69, 19], 2: [135, 206, 235], 3: [255, 0, 255], 4: [255, 165, 0], 5: [255, 0, 0],
+                 6: [255, 255, 0], 7: [0, 100, 0], 8: [0, 0, 139], 9: [50, 50, 50], 10: [0, 0, 0]}
+        for i in k:
+            if len(self.realty[i]) != 0:
+                for j in self.realty[i]:
+                    font = pygame.font.SysFont("intro", 30)
+                    d = cards[j].d
+                    h = cards[j].h
+                    ds = '*' * d + "$" * h
+                    string1 = font.render(cards[j].name + " " + ds, True, [255, 255, 255], color[i])
+                    screen.blit(string1, [x, y])
+                    y += 30
+
+    # возвращает количество карточек определенной категории
     def getamount(self, group):
         return len(self.realty[group])
 
-    def buycard(self, cost, group, loc):
+    # Покупка карты
+    def buycard(self, cost, group, loc, screen):
         if cost <= self.wallet:
-            print(self.name, " покупает это поле")
+            font1 = pygame.font.SysFont("intro", 30)
+            string1 = font1.render(str(self.name) + " покупает это поле", True, [0, 0, 0],
+                                   [150, 150, 150])
+            screen.blit(string1, [450, 340])
             self.wallet -= cost
             if loc not in self.realty[group]:
                 self.realty[group].append(loc)
@@ -79,32 +115,7 @@ class Player:
         if self.wallet <= 0:
             self.active = False
 
-    def print(self):
-        print(self.name, "\nНа счету ", self.wallet)
-
-    """
-    def getrandomr(self):
-        k = list(self.realty.keys())
-        k1 = []
-        for i in k:
-            if self.realty[i] != []:
-                k1.append(k1)
-        j = random.randint(0, len(k1) - 1)
-        z = list(set(self.allrealty[j]) - set(self.realty[j]))
-        while len(z) == 0:
-            j = random.randint(0, len(k) - 1)
-            z = list(set(self.allrealty[j]) - set(self.realty[j]))
-        return z[0]
-
-    def findcard(self, nogroup):
-        k = list(self.realty)
-        for i in k:
-            a = list(set(self.allrealty[i]) - set(self.realty[i]))
-            if len(a) == 1 and i != nogroup:
-                return a[0]
-        self.getrandomr()
-"""
-
+    # Находит наиболее благоприятную карту для обмена у соперника
     def fndonecard(self, srealty, nogroup):
         k = list(self.realty)
         j = None
@@ -117,6 +128,7 @@ class Player:
         else:
             self.findfreecard(srealty, nogroup)
 
+    # Находит карту для обмена у соперника
     def findfreecard(self, srealty, nogroup):
         k = list(self.realty)
         arr = []
@@ -128,7 +140,6 @@ class Player:
         b = arr[j][0]
         return b
 
-    # self.getrandomr()
 
     def addr(self, key, value):
         self.realty[key].append(value)

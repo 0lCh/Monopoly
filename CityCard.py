@@ -41,8 +41,6 @@ class CityCard(Card):
         self.dc = dc
         self.hc = hc
 
-    def print(self):
-        print("Игрок попал на поле №", self.id, self.name, "его стоимость", self.cost)
 
     def checkrent(self):
         cost = 0
@@ -58,9 +56,7 @@ class CityCard(Card):
             cost = self.d4
         elif self.d == 4:
             cost = self.d4
-        # и так далее
         return cost
 
     def plusd(self):
-        print("Строит дом на поле", self.name)
         self.d += 1
