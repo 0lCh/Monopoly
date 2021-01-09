@@ -11,15 +11,10 @@ class Card:
     d = 0
     dc = 0
 
-    def plusd(self):
-        return
-
     def __init__(self, id, name):
         self.id = id
         self.name = name
 
-    # def draw(self):
-    # graph.image(self.x, self.y, "images/" + str(self.id) + ".jpg")
 
     def print(self, screen):
         font = pygame.font.SysFont("intro", 30)

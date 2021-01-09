@@ -14,8 +14,7 @@ from Card import Card
     d4 - аренда с 4 домами
     h1 - аренда с 1 отелем
     dc - стоимость дома
-    hc - стоимость отеля
-    deposit - залог
+    hc - стоимость отел
 Методы
     
 """
@@ -26,7 +25,7 @@ class CityCard(Card):
     h = 0
     owner = None
 
-    def __init__(self, id, group, name, cost, d0, d1, d2, d3, d4, h1, deposit, dc, hc):
+    def __init__(self, id, group, name, cost, d0, d1, d2, d3, d4, h1, dc, hc):
         self.id = id
         self.group = group
         self.name = name
@@ -37,7 +36,6 @@ class CityCard(Card):
         self.d3 = d3
         self.d4 = d4
         self.h1 = h1
-        self.deposit = deposit
         self.dc = dc
         self.hc = hc
 
