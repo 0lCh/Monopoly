@@ -71,7 +71,7 @@ cards = [Card(0, "Поле вперед"),
          Card(36, "Шанс"),
          CityCard(37, 8, "Рига", 3500, 350, 1750, 5000, 11000, 13000, 15000, 2000, 2000),
          TaxCard("Налог на добавочную стоимость", 38, 1000),
-         CityCard(39, 8, "Монреаль", 4000, 500, 2000, 6000, 14000, 17000, 20000,  2000, 2000)]
+         CityCard(39, 8, "Монреаль", 4000, 500, 2000, 6000, 14000, 17000, 20000, 2000, 2000)]
 
 coords = {0: [1050, 740], 1: [960, 740], 2: [895, 740], 3: [830, 740], 4: [765, 740], 5: [700, 740], 6: [630, 740],
           7: [565, 740], 8: [505, 740], 9: [440, 740], 10: [350, 740], 11: [350, 660], 12: [350, 590],
@@ -192,7 +192,7 @@ while running == True:
     # Проверка на возможность построить дом
     txt1 = ""
     spot = players[apl].checkbuilt()
-    if spot != None and cards[spot].h != 1:
+    if spot != None and cards[spot].h != 1 and isinstance(cards[spot], CityCard) == True:
         if cards[spot].d < 4:
             if players[apl].wallet > cards[spot].dc:
                 players[apl].wallet -= cards[spot].dc
@@ -239,10 +239,11 @@ while running == True:
         screen.blit(string1, [420, 380])
     # Проверка на банкрота
     players[apl].checkbankrupt()
+
     if players[apl].active == False:
         players.pop(apl)
 
-        # Проверка на конец игры
+    # Проверка на конец игры
     if len(players) == 1:
         screen.fill((255, 127, 80))
         string1 = font.render("КОНЕЦ ИГРЫ", True, [255, 255, 255])
